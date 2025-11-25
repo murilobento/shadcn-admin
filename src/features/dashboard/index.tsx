@@ -1,3 +1,4 @@
+import React from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -17,8 +18,28 @@ import { ThemeSwitch } from '@/components/theme-switch'
 import { Analytics } from './components/analytics'
 import { Overview } from './components/overview'
 import { RecentSales } from './components/recent-sales'
+import api from '@/lib/api'
 
 export function Dashboard() {
+  const [stats, setStats] = React.useState({
+    totalRevenue: 0,
+    activeUsers: 0,
+    salesCount: 0,
+    activeNow: 0,
+  })
+
+  React.useEffect(() => {
+    async function fetchStats() {
+      try {
+        const response = await api.get('/dashboard/stats')
+        setStats(response.data)
+      } catch (error) {
+        console.error('Failed to fetch stats:', error)
+      }
+    }
+    fetchStats()
+  }, [])
+
   return (
     <>
       {/* ===== Top Heading ===== */}
@@ -78,7 +99,7 @@ export function Dashboard() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className='text-2xl font-bold'>$45,231.89</div>
+                  <div className='text-2xl font-bold'>${stats.totalRevenue.toLocaleString()}</div>
                   <p className='text-muted-foreground text-xs'>
                     +20.1% from last month
                   </p>
@@ -105,7 +126,7 @@ export function Dashboard() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className='text-2xl font-bold'>+2350</div>
+                  <div className='text-2xl font-bold'>+{stats.activeUsers}</div>
                   <p className='text-muted-foreground text-xs'>
                     +180.1% from last month
                   </p>
@@ -129,7 +150,7 @@ export function Dashboard() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className='text-2xl font-bold'>+12,234</div>
+                  <div className='text-2xl font-bold'>+{stats.salesCount.toLocaleString()}</div>
                   <p className='text-muted-foreground text-xs'>
                     +19% from last month
                   </p>
@@ -154,7 +175,7 @@ export function Dashboard() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className='text-2xl font-bold'>+573</div>
+                  <div className='text-2xl font-bold'>+{stats.activeNow}</div>
                   <p className='text-muted-foreground text-xs'>
                     +201 since last hour
                   </p>

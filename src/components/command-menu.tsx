@@ -34,42 +34,63 @@ export function CommandMenu() {
       <CommandList>
         <ScrollArea type='hover' className='h-72 pe-1'>
           <CommandEmpty>No results found.</CommandEmpty>
-          {sidebarData.navGroups.map((group) => (
-            <CommandGroup key={group.title} heading={group.title}>
-              {group.items.map((navItem, i) => {
-                if (navItem.url)
-                  return (
+          <CommandGroup heading='General'>
+            {sidebarData.generalNav.map((navItem, i) => (
+              <CommandItem
+                key={`${navItem.url}-${i}`}
+                value={navItem.title}
+                onSelect={() => {
+                  runCommand(() => navigate({ to: navItem.url as string }))
+                }}
+              >
+                <div className='flex size-4 items-center justify-center'>
+                  <ArrowRight className='text-muted-foreground/80 size-2' />
+                </div>
+                {navItem.title}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+          {sidebarData.modules.map((module) =>
+            module.navGroups.map((group) => (
+              <CommandGroup
+                key={`${module.name}-${group.title}`}
+                heading={`${module.name} - ${group.title}`}
+              >
+                {group.items.map((navItem, i) => {
+                  if (navItem.url)
+                    return (
+                      <CommandItem
+                        key={`${navItem.url}-${i}`}
+                        value={navItem.title}
+                        onSelect={() => {
+                          runCommand(() => navigate({ to: navItem.url as string }))
+                        }}
+                      >
+                        <div className='flex size-4 items-center justify-center'>
+                          <ArrowRight className='text-muted-foreground/80 size-2' />
+                        </div>
+                        {navItem.title}
+                      </CommandItem>
+                    )
+
+                  return navItem.items?.map((subItem, i) => (
                     <CommandItem
-                      key={`${navItem.url}-${i}`}
-                      value={navItem.title}
+                      key={`${navItem.title}-${subItem.url}-${i}`}
+                      value={`${navItem.title}-${subItem.url}`}
                       onSelect={() => {
-                        runCommand(() => navigate({ to: navItem.url }))
+                        runCommand(() => navigate({ to: subItem.url as string }))
                       }}
                     >
                       <div className='flex size-4 items-center justify-center'>
                         <ArrowRight className='text-muted-foreground/80 size-2' />
                       </div>
-                      {navItem.title}
+                      {navItem.title} <ChevronRight /> {subItem.title}
                     </CommandItem>
-                  )
-
-                return navItem.items?.map((subItem, i) => (
-                  <CommandItem
-                    key={`${navItem.title}-${subItem.url}-${i}`}
-                    value={`${navItem.title}-${subItem.url}`}
-                    onSelect={() => {
-                      runCommand(() => navigate({ to: subItem.url }))
-                    }}
-                  >
-                    <div className='flex size-4 items-center justify-center'>
-                      <ArrowRight className='text-muted-foreground/80 size-2' />
-                    </div>
-                    {navItem.title} <ChevronRight /> {subItem.title}
-                  </CommandItem>
-                ))
-              })}
-            </CommandGroup>
-          ))}
+                  ))
+                })}
+              </CommandGroup>
+            ))
+          )}
           <CommandSeparator />
           <CommandGroup heading='Theme'>
             <CommandItem onSelect={() => runCommand(() => setTheme('light'))}>

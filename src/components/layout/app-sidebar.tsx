@@ -1,30 +1,53 @@
+import * as React from 'react'
+import { Link } from '@tanstack/react-router'
+import { Command } from 'lucide-react'
 import { useLayout } from '@/context/layout-provider'
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar'
-// import { AppTitle } from './app-title'
 import { sidebarData } from './data/sidebar-data'
+import { ModuleSwitcher } from './module-switcher'
 import { NavGroup } from './nav-group'
 import { NavUser } from './nav-user'
-import { TeamSwitcher } from './team-switcher'
 
 export function AppSidebar() {
   const { collapsible, variant } = useLayout()
+  const [activeModule, setActiveModule] = React.useState(sidebarData.modules[0])
+
   return (
     <Sidebar collapsible={collapsible} variant={variant}>
       <SidebarHeader>
-        <TeamSwitcher teams={sidebarData.teams} />
-
-        {/* Replace <TeamSwitch /> with the following <AppTitle />
-         /* if you want to use the normal app title instead of TeamSwitch dropdown */}
-        {/* <AppTitle /> */}
+        <div className='flex items-center gap-2 px-4 py-2'>
+          <Command className='size-6' />
+          <span className='font-bold'>Shadcn Admin</span>
+        </div>
+        <SidebarMenu>
+          {sidebarData.generalNav.map((item) => (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton asChild tooltip={item.title}>
+                <Link to={item.url}>
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+        <ModuleSwitcher
+          modules={sidebarData.modules}
+          activeModule={activeModule}
+          setActiveModule={setActiveModule}
+        />
       </SidebarHeader>
       <SidebarContent>
-        {sidebarData.navGroups.map((props) => (
+        {activeModule.navGroups.map((props) => (
           <NavGroup key={props.title} {...props} />
         ))}
       </SidebarContent>
