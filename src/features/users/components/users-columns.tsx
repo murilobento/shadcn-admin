@@ -67,10 +67,17 @@ export const usersColumns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const { status } = row.original
       const badgeColor = callTypes.get(status)
+      const statusMap: Record<string, string> = {
+        active: 'Ativo',
+        inactive: 'Inativo',
+        invited: 'Convidado',
+        suspended: 'Suspenso',
+      }
+
       return (
         <div className='flex space-x-2'>
           <Badge variant='outline' className={cn('capitalize', badgeColor)}>
-            {row.getValue('status')}
+            {statusMap[status] || status}
           </Badge>
         </div>
       )
