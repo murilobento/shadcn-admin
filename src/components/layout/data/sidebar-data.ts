@@ -37,13 +37,8 @@ export const sidebarData: SidebarData = {
       logo: Briefcase,
       navGroups: [
         {
-          title: 'General',
+          title: 'Geral',
           items: [
-            {
-              title: 'Dashboard',
-              url: '/',
-              icon: LayoutDashboard,
-            },
             {
               title: 'Usuários',
               url: '/admin/users',
@@ -68,13 +63,8 @@ export const sidebarData: SidebarData = {
       logo: Store,
       navGroups: [
         {
-          title: 'General',
+          title: 'Geral',
           items: [
-            {
-              title: 'Dashboard',
-              url: '/',
-              icon: LayoutDashboard,
-            },
             {
               title: 'Clientes',
               url: '/commercial/customers',
@@ -94,13 +84,8 @@ export const sidebarData: SidebarData = {
       logo: Warehouse,
       navGroups: [
         {
-          title: 'General',
+          title: 'Geral',
           items: [
-            {
-              title: 'Dashboard',
-              url: '/',
-              icon: LayoutDashboard,
-            },
             {
               title: 'Inventário',
               url: '/stock/inventory',
@@ -135,13 +120,8 @@ export const sidebarData: SidebarData = {
       logo: DollarSign,
       navGroups: [
         {
-          title: 'General',
+          title: 'Geral',
           items: [
-            {
-              title: 'Dashboard',
-              url: '/',
-              icon: LayoutDashboard,
-            },
             {
               title: 'Contas a Pagar',
               url: '/financial/accounts-payable',

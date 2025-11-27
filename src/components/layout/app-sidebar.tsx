@@ -16,10 +16,18 @@ import { sidebarData } from './data/sidebar-data'
 import { ModuleSwitcher } from './module-switcher'
 import { NavGroup } from './nav-group'
 import { NavUser } from './nav-user'
+import { useAuthStore } from '@/stores/auth-store'
 
 export function AppSidebar() {
   const { collapsible, variant } = useLayout()
+  const { auth } = useAuthStore()
   const [activeModule, setActiveModule] = React.useState(sidebarData.modules[0])
+
+  const user = {
+    name: auth.user ? `${auth.user.firstName} ${auth.user.lastName}` : 'User',
+    email: auth.user?.email || '',
+    avatar: sidebarData.user.avatar,
+  }
 
   return (
     <Sidebar collapsible={collapsible} variant={variant}>
@@ -52,7 +60,7 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={sidebarData.user} />
+        <NavUser user={user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

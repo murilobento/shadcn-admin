@@ -9,6 +9,8 @@ type UsersContextType = {
   setOpen: (str: UsersDialogType | null) => void
   currentRow: User | null
   setCurrentRow: React.Dispatch<React.SetStateAction<User | null>>
+  refreshKey: number
+  triggerRefresh: () => void
 }
 
 const UsersContext = React.createContext<UsersContextType | null>(null)
@@ -16,9 +18,12 @@ const UsersContext = React.createContext<UsersContextType | null>(null)
 export function UsersProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useDialogState<UsersDialogType>(null)
   const [currentRow, setCurrentRow] = useState<User | null>(null)
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  const triggerRefresh = () => setRefreshKey((prev) => prev + 1)
 
   return (
-    <UsersContext value={{ open, setOpen, currentRow, setCurrentRow }}>
+    <UsersContext value={{ open, setOpen, currentRow, setCurrentRow, refreshKey, triggerRefresh }}>
       {children}
     </UsersContext>
   )

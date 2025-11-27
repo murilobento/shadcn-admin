@@ -33,6 +33,7 @@ import { Route as ClerkauthSignUpRouteImport } from './routes/clerk/(auth)/sign-
 import { Route as ClerkauthSignInRouteImport } from './routes/clerk/(auth)/sign-in'
 import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenticated/errors/$error'
 import { Route as AuthenticatedAdminSettingsRouteRouteImport } from './routes/_authenticated/admin/settings/route'
+import { Route as AuthenticatedCommercialCustomersIndexRouteImport } from './routes/_authenticated/commercial/customers/index'
 import { Route as AuthenticatedAdminUsersIndexRouteImport } from './routes/_authenticated/admin/users/index'
 import { Route as AuthenticatedAdminSettingsIndexRouteImport } from './routes/_authenticated/admin/settings/index'
 import { Route as AuthenticatedAdminSettingsNotificationsRouteImport } from './routes/_authenticated/admin/settings/notifications'
@@ -161,6 +162,12 @@ const AuthenticatedAdminSettingsRouteRoute =
     path: '/admin/settings',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedCommercialCustomersIndexRoute =
+  AuthenticatedCommercialCustomersIndexRouteImport.update({
+    id: '/commercial/customers/',
+    path: '/commercial/customers/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminUsersIndexRoute =
   AuthenticatedAdminUsersIndexRouteImport.update({
     id: '/admin/users/',
@@ -227,6 +234,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings/notifications': typeof AuthenticatedAdminSettingsNotificationsRoute
   '/admin/settings/': typeof AuthenticatedAdminSettingsIndexRoute
   '/admin/users': typeof AuthenticatedAdminUsersIndexRoute
+  '/commercial/customers': typeof AuthenticatedCommercialCustomersIndexRoute
 }
 export interface FileRoutesByTo {
   '/clerk': typeof ClerkAuthenticatedRouteRouteWithChildren
@@ -255,6 +263,7 @@ export interface FileRoutesByTo {
   '/admin/settings/notifications': typeof AuthenticatedAdminSettingsNotificationsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsIndexRoute
   '/admin/users': typeof AuthenticatedAdminUsersIndexRoute
+  '/commercial/customers': typeof AuthenticatedCommercialCustomersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -288,6 +297,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/settings/notifications': typeof AuthenticatedAdminSettingsNotificationsRoute
   '/_authenticated/admin/settings/': typeof AuthenticatedAdminSettingsIndexRoute
   '/_authenticated/admin/users/': typeof AuthenticatedAdminUsersIndexRoute
+  '/_authenticated/commercial/customers/': typeof AuthenticatedCommercialCustomersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -320,6 +330,7 @@ export interface FileRouteTypes {
     | '/admin/settings/notifications'
     | '/admin/settings/'
     | '/admin/users'
+    | '/commercial/customers'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/clerk'
@@ -348,6 +359,7 @@ export interface FileRouteTypes {
     | '/admin/settings/notifications'
     | '/admin/settings'
     | '/admin/users'
+    | '/commercial/customers'
   id:
     | '__root__'
     | '/_authenticated'
@@ -380,6 +392,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/settings/notifications'
     | '/_authenticated/admin/settings/'
     | '/_authenticated/admin/users/'
+    | '/_authenticated/commercial/customers/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -567,6 +580,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSettingsRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/commercial/customers/': {
+      id: '/_authenticated/commercial/customers/'
+      path: '/commercial/customers'
+      fullPath: '/commercial/customers'
+      preLoaderRoute: typeof AuthenticatedCommercialCustomersIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/users/': {
       id: '/_authenticated/admin/users/'
       path: '/admin/users'
@@ -647,6 +667,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHelpCenterIndexRoute: typeof AuthenticatedHelpCenterIndexRoute
   AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
   AuthenticatedAdminUsersIndexRoute: typeof AuthenticatedAdminUsersIndexRoute
+  AuthenticatedCommercialCustomersIndexRoute: typeof AuthenticatedCommercialCustomersIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -659,6 +680,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHelpCenterIndexRoute: AuthenticatedHelpCenterIndexRoute,
   AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,
   AuthenticatedAdminUsersIndexRoute: AuthenticatedAdminUsersIndexRoute,
+  AuthenticatedCommercialCustomersIndexRoute:
+    AuthenticatedCommercialCustomersIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

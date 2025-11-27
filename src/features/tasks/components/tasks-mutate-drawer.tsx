@@ -32,10 +32,10 @@ type TaskMutateDrawerProps = {
 }
 
 const formSchema = z.object({
-  title: z.string().min(1, 'Title is required.'),
-  status: z.string().min(1, 'Please select a status.'),
-  label: z.string().min(1, 'Please select a label.'),
-  priority: z.string().min(1, 'Please choose a priority.'),
+  title: z.string().min(1, 'O título é obrigatório.'),
+  status: z.string().min(1, 'Por favor, selecione um status.'),
+  label: z.string().min(1, 'Por favor, selecione uma etiqueta.'),
+  priority: z.string().min(1, 'Por favor, escolha uma prioridade.'),
 })
 type TaskForm = z.infer<typeof formSchema>
 
@@ -73,12 +73,12 @@ export function TasksMutateDrawer({
     >
       <SheetContent className='flex flex-col'>
         <SheetHeader className='text-start'>
-          <SheetTitle>{isUpdate ? 'Update' : 'Create'} Task</SheetTitle>
+          <SheetTitle>{isUpdate ? 'Atualizar' : 'Criar'} Tarefa</SheetTitle>
           <SheetDescription>
             {isUpdate
-              ? 'Update the task by providing necessary info.'
-              : 'Add a new task by providing necessary info.'}
-            Click save when you&apos;re done.
+              ? 'Atualize a tarefa fornecendo as informações necessárias.'
+              : 'Adicione uma nova tarefa fornecendo as informações necessárias.'}
+            Clique em salvar quando terminar.
           </SheetDescription>
         </SheetHeader>
         <Form {...form}>
@@ -92,9 +92,9 @@ export function TasksMutateDrawer({
               name='title'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>Título</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder='Enter a title' />
+                    <Input {...field} placeholder='Digite um título' />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -109,7 +109,7 @@ export function TasksMutateDrawer({
                   <SelectDropdown
                     defaultValue={field.value}
                     onValueChange={field.onChange}
-                    placeholder='Select dropdown'
+                    placeholder='Selecione'
                     items={[
                       { label: 'In Progress', value: 'in progress' },
                       { label: 'Backlog', value: 'backlog' },
@@ -127,7 +127,7 @@ export function TasksMutateDrawer({
               name='label'
               render={({ field }) => (
                 <FormItem className='relative'>
-                  <FormLabel>Label</FormLabel>
+                  <FormLabel>Etiqueta</FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -165,7 +165,7 @@ export function TasksMutateDrawer({
               name='priority'
               render={({ field }) => (
                 <FormItem className='relative'>
-                  <FormLabel>Priority</FormLabel>
+                  <FormLabel>Prioridade</FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -200,10 +200,10 @@ export function TasksMutateDrawer({
         </Form>
         <SheetFooter className='gap-2'>
           <SheetClose asChild>
-            <Button variant='outline'>Close</Button>
+            <Button variant='outline'>Fechar</Button>
           </SheetClose>
           <Button form='tasks-form' type='submit'>
-            Save changes
+            Salvar alterações
           </Button>
         </SheetFooter>
       </SheetContent>

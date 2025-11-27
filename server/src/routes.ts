@@ -1,12 +1,27 @@
 import { Router } from 'express';
 import { prisma } from './lib/prisma';
 import { register, login } from './controllers/authController';
+import { getCustomers, createCustomer, updateCustomer, deleteCustomer } from './controllers/customerController';
+import { getUsers, createUser, updateUser, deleteUser, inviteUser } from './controllers/userController';
 import { authenticateToken } from './middleware/authMiddleware';
 
 const router = Router();
 
 router.post('/auth/register', register);
 router.post('/auth/login', login);
+
+router.get('/customers', authenticateToken, getCustomers);
+router.post('/customers', authenticateToken, createCustomer);
+router.put('/customers/:id', authenticateToken, updateCustomer);
+router.patch('/customers/:id', authenticateToken, updateCustomer);
+router.delete('/customers/:id', authenticateToken, deleteCustomer);
+
+router.get('/users', authenticateToken, getUsers);
+router.post('/users', authenticateToken, createUser);
+router.put('/users/:id', authenticateToken, updateUser);
+router.patch('/users/:id', authenticateToken, updateUser);
+router.delete('/users/:id', authenticateToken, deleteUser);
+router.post('/users/invite', authenticateToken, inviteUser);
 
 router.get('/dashboard/stats', authenticateToken, async (req, res) => {
     try {

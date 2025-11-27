@@ -22,18 +22,17 @@ import { PasswordInput } from '@/components/password-input'
 
 const formSchema = z
   .object({
-    email: z.email({
-      error: (iss) =>
-        iss.input === '' ? 'Please enter your email' : undefined,
-    }),
+    firstName: z.string().min(1, 'Por favor, insira seu nome'),
+    lastName: z.string().min(1, 'Por favor, insira seu sobrenome'),
+    email: z.string().email('Email inválido'),
     password: z
       .string()
-      .min(1, 'Please enter your password')
-      .min(7, 'Password must be at least 7 characters long'),
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
+      .min(1, 'Por favor, insira sua senha')
+      .min(7, 'A senha deve ter pelo menos 7 caracteres'),
+    confirmPassword: z.string().min(1, 'Por favor, confirme sua senha'),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match.",
+    message: "As senhas não coincidem.",
     path: ['confirmPassword'],
   })
 
@@ -48,6 +47,8 @@ export function SignUpForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -60,16 +61,18 @@ export function SignUpForm({
       const response = await api.post('/auth/register', {
         email: data.email,
         password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
       })
       const { token, user } = response.data
 
       auth.setUser(user)
       auth.setAccessToken(token)
 
-      toast.success('Account created successfully!')
+      toast.success('Conta criada com sucesso!')
       navigate({ to: '/' })
     } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Registration failed')
+      toast.error(error.response?.data?.error || 'Falha no cadastro')
     } finally {
       setIsLoading(false)
     }
@@ -84,6 +87,33 @@ export function SignUpForm({
       >
         <FormField
           control={form.control}
+          name='firstName'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nome</FormLabel>
+              <FormControl>
+                <Input placeholder='João' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='lastName'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Sobrenome</FormLabel>
+              <FormControl>
+                <Input placeholder='Silva' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name='email'
           render={({ field }) => (
             <FormItem>
@@ -95,12 +125,13 @@ export function SignUpForm({
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name='password'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Senha</FormLabel>
               <FormControl>
                 <PasswordInput placeholder='********' {...field} />
               </FormControl>
@@ -113,7 +144,7 @@ export function SignUpForm({
           name='confirmPassword'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
+              <FormLabel>Confirmar Senha</FormLabel>
               <FormControl>
                 <PasswordInput placeholder='********' {...field} />
               </FormControl>
@@ -122,7 +153,7 @@ export function SignUpForm({
           )}
         />
         <Button className='mt-2' disabled={isLoading}>
-          Create Account
+          Criar Conta
         </Button>
 
 

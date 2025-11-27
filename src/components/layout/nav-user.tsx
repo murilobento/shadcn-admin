@@ -81,27 +81,27 @@ export function NavUser({ user }: NavUserProps) {
               <DropdownMenuGroup>
                 <DropdownMenuItem>
                   <Sparkles />
-                  Upgrade to Pro
+                  Mudar para Pro
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
-                  <Link to='/settings/account'>
+                  <Link to='/admin/settings/account'>
                     <BadgeCheck />
-                    Account
+                    Conta
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to='/settings'>
+                  <Link to='/admin/settings'>
                     <CreditCard />
-                    Billing
+                    Faturamento
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to='/settings/notifications'>
+                  <Link to='/admin/settings/notifications'>
                     <Bell />
-                    Notifications
+                    Notificações
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
@@ -111,7 +111,7 @@ export function NavUser({ user }: NavUserProps) {
                 onClick={() => setOpen(true)}
               >
                 <LogOut />
-                Sign out
+                Sair
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

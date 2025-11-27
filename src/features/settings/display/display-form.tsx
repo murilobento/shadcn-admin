@@ -17,19 +17,19 @@ import {
 const items = [
   {
     id: 'recents',
-    label: 'Recents',
+    label: 'Recentes',
   },
   {
     id: 'home',
-    label: 'Home',
+    label: 'Início',
   },
   {
     id: 'applications',
-    label: 'Applications',
+    label: 'Aplicativos',
   },
   {
     id: 'desktop',
-    label: 'Desktop',
+    label: 'Área de Trabalho',
   },
   {
     id: 'downloads',
@@ -37,13 +37,13 @@ const items = [
   },
   {
     id: 'documents',
-    label: 'Documents',
+    label: 'Documentos',
   },
 ] as const
 
 const displayFormSchema = z.object({
   items: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: 'You have to select at least one item.',
+    message: 'Você deve selecionar pelo menos um item.',
   }),
 })
 
@@ -72,9 +72,9 @@ export function DisplayForm() {
           render={() => (
             <FormItem>
               <div className='mb-4'>
-                <FormLabel className='text-base'>Sidebar</FormLabel>
+                <FormLabel className='text-base'>Barra Lateral</FormLabel>
                 <FormDescription>
-                  Select the items you want to display in the sidebar.
+                  Selecione os itens que você deseja exibir na barra lateral.
                 </FormDescription>
               </div>
               {items.map((item) => (
@@ -95,10 +95,10 @@ export function DisplayForm() {
                               return checked
                                 ? field.onChange([...field.value, item.id])
                                 : field.onChange(
-                                    field.value?.filter(
-                                      (value) => value !== item.id
-                                    )
+                                  field.value?.filter(
+                                    (value) => value !== item.id
                                   )
+                                )
                             }}
                           />
                         </FormControl>
@@ -114,7 +114,7 @@ export function DisplayForm() {
             </FormItem>
           )}
         />
-        <Button type='submit'>Update display</Button>
+        <Button type='submit'>Atualizar exibição</Button>
       </form>
     </Form>
   )

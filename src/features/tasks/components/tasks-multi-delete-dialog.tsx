@@ -16,7 +16,7 @@ type TaskMultiDeleteDialogProps<TData> = {
   table: Table<TData>
 }
 
-const CONFIRM_WORD = 'DELETE'
+const CONFIRM_WORD = 'DELETAR'
 
 export function TasksMultiDeleteDialog<TData>({
   open,
@@ -29,21 +29,20 @@ export function TasksMultiDeleteDialog<TData>({
 
   const handleDelete = () => {
     if (value.trim() !== CONFIRM_WORD) {
-      toast.error(`Please type "${CONFIRM_WORD}" to confirm.`)
+      toast.error(`Por favor, digite "${CONFIRM_WORD}" para confirmar.`)
       return
     }
 
     onOpenChange(false)
 
     toast.promise(sleep(2000), {
-      loading: 'Deleting tasks...',
+      loading: 'Deletando tarefas...',
       success: () => {
         table.resetRowSelection()
-        return `Deleted ${selectedRows.length} ${
-          selectedRows.length > 1 ? 'tasks' : 'task'
-        }`
+        return `Deletado ${selectedRows.length} ${selectedRows.length > 1 ? 'tarefas' : 'tarefa'
+          }`
       },
-      error: 'Error',
+      error: 'Erro',
     })
   }
 
@@ -59,35 +58,35 @@ export function TasksMultiDeleteDialog<TData>({
             className='stroke-destructive me-1 inline-block'
             size={18}
           />{' '}
-          Delete {selectedRows.length}{' '}
-          {selectedRows.length > 1 ? 'tasks' : 'task'}
+          Deletar {selectedRows.length}{' '}
+          {selectedRows.length > 1 ? 'tarefas' : 'tarefa'}
         </span>
       }
       desc={
         <div className='space-y-4'>
           <p className='mb-2'>
-            Are you sure you want to delete the selected tasks? <br />
-            This action cannot be undone.
+            Tem certeza que deseja deletar as tarefas selecionadas? <br />
+            Esta ação não pode ser desfeita.
           </p>
 
           <Label className='my-4 flex flex-col items-start gap-1.5'>
-            <span className=''>Confirm by typing "{CONFIRM_WORD}":</span>
+            <span className=''>Confirme digitando "{CONFIRM_WORD}":</span>
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder={`Type "${CONFIRM_WORD}" to confirm.`}
+              placeholder={`Digite "${CONFIRM_WORD}" para confirmar.`}
             />
           </Label>
 
           <Alert variant='destructive'>
-            <AlertTitle>Warning!</AlertTitle>
+            <AlertTitle>Aviso!</AlertTitle>
             <AlertDescription>
-              Please be careful, this operation can not be rolled back.
+              Por favor, tenha cuidado, esta operação não pode ser desfeita.
             </AlertDescription>
           </Alert>
         </div>
       }
-      confirmText='Delete'
+      confirmText='Deletar'
       destructive
     />
   )

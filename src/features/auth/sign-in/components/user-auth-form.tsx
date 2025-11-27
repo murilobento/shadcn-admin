@@ -23,12 +23,12 @@ import { PasswordInput } from '@/components/password-input'
 
 const formSchema = z.object({
   email: z.email({
-    error: (iss) => (iss.input === '' ? 'Please enter your email' : undefined),
+    error: (iss) => (iss.input === '' ? 'Por favor, insira seu email' : undefined),
   }),
   password: z
     .string()
-    .min(1, 'Please enter your password')
-    .min(7, 'Password must be at least 7 characters long'),
+    .min(1, 'Por favor, insira sua senha')
+    .min(7, 'A senha deve ter pelo menos 7 caracteres'),
 })
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLFormElement> {
@@ -62,12 +62,12 @@ export function UserAuthForm({
       auth.setUser(user)
       auth.setAccessToken(token)
 
-      toast.success(`Welcome back, ${user.name || user.email}!`)
+      toast.success(`Bem-vindo de volta, ${user.firstName || user.email}!`)
 
       const targetPath = redirectTo || '/'
       navigate({ to: targetPath, replace: true })
     } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Login failed')
+      toast.error(error.response?.data?.error || 'Falha no login')
     } finally {
       setIsLoading(false)
     }
@@ -98,7 +98,7 @@ export function UserAuthForm({
           name='password'
           render={({ field }) => (
             <FormItem className='relative'>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Senha</FormLabel>
               <FormControl>
                 <PasswordInput placeholder='********' {...field} />
               </FormControl>
@@ -107,14 +107,14 @@ export function UserAuthForm({
                 to='/forgot-password'
                 className='text-muted-foreground absolute end-0 -top-0.5 text-sm font-medium hover:opacity-75'
               >
-                Forgot password?
+                Esqueceu a senha?
               </Link>
             </FormItem>
           )}
         />
         <Button className='mt-2' disabled={isLoading}>
           {isLoading ? <Loader2 className='animate-spin' /> : <LogIn />}
-          Sign in
+          Entrar
         </Button>
 
 

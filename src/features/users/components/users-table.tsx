@@ -26,14 +26,30 @@ import { roles } from '../data/data'
 import { type User } from '../data/schema'
 import { DataTableBulkActions } from './data-table-bulk-actions'
 import { usersColumns as columns } from './users-columns'
+import { useUsers } from './users-provider'
+import api from '@/lib/api'
 
 type DataTableProps = {
-  data: User[]
   search: Record<string, unknown>
   navigate: NavigateFn
 }
 
-export function UsersTable({ data, search, navigate }: DataTableProps) {
+export function UsersTable({ search, navigate }: DataTableProps) {
+  const { refreshKey } = useUsers()
+  const [data, setData] = useState<User[]>([])
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await api.get('/users')
+        setData(response.data)
+      } catch (error) {
+        console.error('Failed to fetch users', error)
+      }
+    }
+    fetchUsers()
+  }, [refreshKey])
+
   // Local UI-only states
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -101,22 +117,22 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
     >
       <DataTableToolbar
         table={table}
-        searchPlaceholder='Filter users...'
+        searchPlaceholder='Filtrar usuários...'
         searchKey='username'
         filters={[
           {
             columnId: 'status',
             title: 'Status',
             options: [
-              { label: 'Active', value: 'active' },
-              { label: 'Inactive', value: 'inactive' },
-              { label: 'Invited', value: 'invited' },
-              { label: 'Suspended', value: 'suspended' },
+              { label: 'Ativo', value: 'active' },
+              { label: 'Inativo', value: 'inactive' },
+              { label: 'Convidado', value: 'invited' },
+              { label: 'Suspenso', value: 'suspended' },
             ],
           },
           {
             columnId: 'role',
-            title: 'Role',
+            title: 'Cargo',
             options: roles.map((role) => ({ ...role })),
           },
         ]}
@@ -140,9 +156,9 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   )
                 })}
@@ -180,7 +196,7 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
                   colSpan={columns.length}
                   className='h-24 text-center'
                 >
-                  No results.
+                  Nenhum resultado.
                 </TableCell>
               </TableRow>
             )}

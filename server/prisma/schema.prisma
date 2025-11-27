@@ -23,9 +23,25 @@ model RecentActivity {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  password String
-  name     String?
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  firstName   String
+  lastName    String
+  email       String   @unique
+  status      String   @default("active")
+  role        String   @default("user")
+  password    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Customer {
+  id          String   @id @default(uuid())
+  name        String
+  email       String
+  phoneNumber String
+  status      String
+  address     String?
+  city        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

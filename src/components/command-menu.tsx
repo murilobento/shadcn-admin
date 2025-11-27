@@ -30,11 +30,11 @@ export function CommandMenu() {
 
   return (
     <CommandDialog modal open={open} onOpenChange={setOpen}>
-      <CommandInput placeholder='Type a command or search...' />
+      <CommandInput placeholder='Digite um comando ou pesquise...' />
       <CommandList>
         <ScrollArea type='hover' className='h-72 pe-1'>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading='General'>
+          <CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
+          <CommandGroup heading='Geral'>
             {sidebarData.generalNav.map((navItem, i) => (
               <CommandItem
                 key={`${navItem.url}-${i}`}
@@ -92,17 +92,17 @@ export function CommandMenu() {
             ))
           )}
           <CommandSeparator />
-          <CommandGroup heading='Theme'>
+          <CommandGroup heading='Tema'>
             <CommandItem onSelect={() => runCommand(() => setTheme('light'))}>
-              <Sun /> <span>Light</span>
+              <Sun /> <span>Claro</span>
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => setTheme('dark'))}>
               <Moon className='scale-90' />
-              <span>Dark</span>
+              <span>Escuro</span>
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => setTheme('system'))}>
               <Laptop />
-              <span>System</span>
+              <span>Sistema</span>
             </CommandItem>
           </CommandGroup>
         </ScrollArea>

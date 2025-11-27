@@ -4,35 +4,35 @@ import { Separator } from '@/components/ui/separator'
 import { ConfigDrawer } from '@/components/config-drawer'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
-import { ProfileDropdown } from '@/components/profile-dropdown'
+
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
 import { SidebarNav } from './components/sidebar-nav'
 
 const sidebarNavItems = [
   {
-    title: 'Profile',
-    href: '/settings',
+    title: 'Perfil',
+    href: '/admin/settings',
     icon: <UserCog size={18} />,
   },
   {
-    title: 'Account',
-    href: '/settings/account',
+    title: 'Conta',
+    href: '/admin/settings/account',
     icon: <Wrench size={18} />,
   },
   {
-    title: 'Appearance',
-    href: '/settings/appearance',
+    title: 'Aparência',
+    href: '/admin/settings/appearance',
     icon: <Palette size={18} />,
   },
   {
-    title: 'Notifications',
-    href: '/settings/notifications',
+    title: 'Notificações',
+    href: '/admin/settings/notifications',
     icon: <Bell size={18} />,
   },
   {
-    title: 'Display',
-    href: '/settings/display',
+    title: 'Exibição',
+    href: '/admin/settings/display',
     icon: <Monitor size={18} />,
   },
 ]
@@ -46,17 +46,17 @@ export function Settings() {
         <div className='ms-auto flex items-center space-x-4'>
           <ThemeSwitch />
           <ConfigDrawer />
-          <ProfileDropdown />
+
         </div>
       </Header>
 
       <Main fixed>
         <div className='space-y-0.5'>
           <h1 className='text-2xl font-bold tracking-tight md:text-3xl'>
-            Settings
+            Configurações
           </h1>
           <p className='text-muted-foreground'>
-            Manage your account settings and set e-mail preferences.
+            Gerencie as configurações da sua conta e defina as preferências de e-mail.
           </p>
         </div>
         <Separator className='my-4 lg:my-6' />

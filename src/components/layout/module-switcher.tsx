@@ -40,10 +40,10 @@ export function ModuleSwitcher({
                                 <activeModule.logo className='size-4' />
                             </div>
                             <div className='grid flex-1 text-start text-sm leading-tight'>
+                                <span className='truncate text-xs'>Módulo</span>
                                 <span className='truncate font-semibold'>
                                     {activeModule.name}
                                 </span>
-                                <span className='truncate text-xs'>Module</span>
                             </div>
                             <ChevronsUpDown className='ms-auto' />
                         </SidebarMenuButton>
@@ -55,7 +55,7 @@ export function ModuleSwitcher({
                         sideOffset={4}
                     >
                         <DropdownMenuLabel className='text-muted-foreground text-xs'>
-                            Modules
+                            Módulos
                         </DropdownMenuLabel>
                         {modules.map((module) => (
                             <DropdownMenuItem

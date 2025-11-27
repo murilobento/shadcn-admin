@@ -2,37 +2,37 @@ import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 
 const data = [
   {
-    name: 'Mon',
+    name: 'Seg',
     clicks: Math.floor(Math.random() * 900) + 100,
     uniques: Math.floor(Math.random() * 700) + 80,
   },
   {
-    name: 'Tue',
+    name: 'Ter',
     clicks: Math.floor(Math.random() * 900) + 100,
     uniques: Math.floor(Math.random() * 700) + 80,
   },
   {
-    name: 'Wed',
+    name: 'Qua',
     clicks: Math.floor(Math.random() * 900) + 100,
     uniques: Math.floor(Math.random() * 700) + 80,
   },
   {
-    name: 'Thu',
+    name: 'Qui',
     clicks: Math.floor(Math.random() * 900) + 100,
     uniques: Math.floor(Math.random() * 700) + 80,
   },
   {
-    name: 'Fri',
+    name: 'Sex',
     clicks: Math.floor(Math.random() * 900) + 100,
     uniques: Math.floor(Math.random() * 700) + 80,
   },
   {
-    name: 'Sat',
+    name: 'Sáb',
     clicks: Math.floor(Math.random() * 900) + 100,
     uniques: Math.floor(Math.random() * 700) + 80,
   },
   {
-    name: 'Sun',
+    name: 'Dom',
     clicks: Math.floor(Math.random() * 900) + 100,
     uniques: Math.floor(Math.random() * 700) + 80,
   },

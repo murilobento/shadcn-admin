@@ -21,7 +21,7 @@ const notificationsFormSchema = z.object({
   type: z.enum(['all', 'mentions', 'none'], {
     error: (iss) =>
       iss.input === undefined
-        ? 'Please select a notification type.'
+        ? 'Por favor, selecione um tipo de notificação.'
         : undefined,
   }),
   mobile: z.boolean().default(false).optional(),
@@ -58,7 +58,7 @@ export function NotificationsForm() {
           name='type'
           render={({ field }) => (
             <FormItem className='relative space-y-3'>
-              <FormLabel>Notify me about...</FormLabel>
+              <FormLabel>Notifique-me sobre...</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
@@ -70,7 +70,7 @@ export function NotificationsForm() {
                       <RadioGroupItem value='all' />
                     </FormControl>
                     <FormLabel className='font-normal'>
-                      All new messages
+                      Todas as novas mensagens
                     </FormLabel>
                   </FormItem>
                   <FormItem className='flex items-center'>
@@ -78,14 +78,14 @@ export function NotificationsForm() {
                       <RadioGroupItem value='mentions' />
                     </FormControl>
                     <FormLabel className='font-normal'>
-                      Direct messages and mentions
+                      Mensagens diretas e menções
                     </FormLabel>
                   </FormItem>
                   <FormItem className='flex items-center'>
                     <FormControl>
                       <RadioGroupItem value='none' />
                     </FormControl>
-                    <FormLabel className='font-normal'>Nothing</FormLabel>
+                    <FormLabel className='font-normal'>Nada</FormLabel>
                   </FormItem>
                 </RadioGroup>
               </FormControl>
@@ -94,7 +94,7 @@ export function NotificationsForm() {
           )}
         />
         <div className='relative'>
-          <h3 className='mb-4 text-lg font-medium'>Email Notifications</h3>
+          <h3 className='mb-4 text-lg font-medium'>Notificações por Email</h3>
           <div className='space-y-4'>
             <FormField
               control={form.control}
@@ -103,10 +103,10 @@ export function NotificationsForm() {
                 <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
                   <div className='space-y-0.5'>
                     <FormLabel className='text-base'>
-                      Communication emails
+                      Emails de comunicação
                     </FormLabel>
                     <FormDescription>
-                      Receive emails about your account activity.
+                      Receba emails sobre a atividade da sua conta.
                     </FormDescription>
                   </div>
                   <FormControl>
@@ -125,10 +125,10 @@ export function NotificationsForm() {
                 <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
                   <div className='space-y-0.5'>
                     <FormLabel className='text-base'>
-                      Marketing emails
+                      Emails de marketing
                     </FormLabel>
                     <FormDescription>
-                      Receive emails about new products, features, and more.
+                      Receba emails sobre novos produtos, recursos e mais.
                     </FormDescription>
                   </div>
                   <FormControl>
@@ -146,9 +146,9 @@ export function NotificationsForm() {
               render={({ field }) => (
                 <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
                   <div className='space-y-0.5'>
-                    <FormLabel className='text-base'>Social emails</FormLabel>
+                    <FormLabel className='text-base'>Emails sociais</FormLabel>
                     <FormDescription>
-                      Receive emails for friend requests, follows, and more.
+                      Receba emails para solicitações de amizade, seguidores e mais.
                     </FormDescription>
                   </div>
                   <FormControl>
@@ -166,9 +166,9 @@ export function NotificationsForm() {
               render={({ field }) => (
                 <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
                   <div className='space-y-0.5'>
-                    <FormLabel className='text-base'>Security emails</FormLabel>
+                    <FormLabel className='text-base'>Emails de segurança</FormLabel>
                     <FormDescription>
-                      Receive emails about your account activity and security.
+                      Receba emails sobre a atividade e segurança da sua conta.
                     </FormDescription>
                   </div>
                   <FormControl>
@@ -197,23 +197,23 @@ export function NotificationsForm() {
               </FormControl>
               <div className='space-y-1 leading-none'>
                 <FormLabel>
-                  Use different settings for my mobile devices
+                  Usar configurações diferentes para meus dispositivos móveis
                 </FormLabel>
                 <FormDescription>
-                  You can manage your mobile notifications in the{' '}
+                  Você pode gerenciar suas notificações móveis na página de{' '}
                   <Link
-                    to='/settings'
+                    to='/admin/settings'
                     className='underline decoration-dashed underline-offset-4 hover:decoration-solid'
                   >
-                    mobile settings
-                  </Link>{' '}
-                  page.
+                    configurações móveis
+                  </Link>
+                  .
                 </FormDescription>
               </div>
             </FormItem>
           )}
         />
-        <Button type='submit'>Update notifications</Button>
+        <Button type='submit'>Atualizar notificações</Button>
       </form>
     </Form>
   )

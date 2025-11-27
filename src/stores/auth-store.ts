@@ -4,9 +4,11 @@ import { getCookie, setCookie, removeCookie } from '@/lib/cookies'
 const ACCESS_TOKEN = 'thisisjustarandomstring'
 
 interface AuthUser {
-  id: number
+  id: string
   email: string
-  name?: string
+  firstName: string
+  lastName: string
+  role: string
 }
 
 interface AuthState {

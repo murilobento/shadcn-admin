@@ -113,7 +113,7 @@ export function TasksTable({ data }: DataTableProps) {
     >
       <DataTableToolbar
         table={table}
-        searchPlaceholder='Filter by title or ID...'
+        searchPlaceholder='Filtrar por título ou ID...'
         filters={[
           {
             columnId: 'status',
@@ -122,7 +122,7 @@ export function TasksTable({ data }: DataTableProps) {
           },
           {
             columnId: 'priority',
-            title: 'Priority',
+            title: 'Prioridade',
             options: priorities,
           },
         ]}
@@ -145,9 +145,9 @@ export function TasksTable({ data }: DataTableProps) {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   )
                 })}
@@ -183,7 +183,7 @@ export function TasksTable({ data }: DataTableProps) {
                   colSpan={columns.length}
                   className='h-24 text-center'
                 >
-                  No results.
+                  Nenhum resultado.
                 </TableCell>
               </TableRow>
             )}
