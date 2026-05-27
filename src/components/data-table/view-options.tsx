@@ -12,10 +12,18 @@ import {
 
 type DataTableViewOptionsProps<TData> = {
   table: Table<TData>
+  labels?: Record<string, string>
+}
+
+const COLUMN_LABELS: Record<string, string> = {
+  fullName: 'Nome',
+  email: 'E-mail',
+  createdAt: 'Criado em',
 }
 
 export function DataTableViewOptions<TData>({
   table,
+  labels,
 }: DataTableViewOptionsProps<TData>) {
   return (
     <DropdownMenu modal={false}>
@@ -26,11 +34,11 @@ export function DataTableViewOptions<TData>({
           className='ms-auto hidden h-8 lg:flex'
         >
           <MixerHorizontalIcon className='size-4' />
-          View
+          Visualizar
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-37.5'>
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        <DropdownMenuLabel>Alternar colunas</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
           .getAllColumns()
@@ -46,7 +54,7 @@ export function DataTableViewOptions<TData>({
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {column.id}
+                {(labels ?? COLUMN_LABELS)[column.id] ?? column.id}
               </DropdownMenuCheckboxItem>
             )
           })}

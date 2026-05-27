@@ -46,7 +46,7 @@ export function ConfigDrawer() {
         <Button
           size='icon'
           variant='ghost'
-          aria-label='Open theme settings'
+          aria-label='Abrir configurações de tema'
           className='rounded-full'
         >
           <Settings aria-hidden='true' />
@@ -54,9 +54,9 @@ export function ConfigDrawer() {
       </SheetTrigger>
       <SheetContent className='flex flex-col'>
         <SheetHeader className='pb-0 text-start'>
-          <SheetTitle>Theme Settings</SheetTitle>
+          <SheetTitle>Configurações de Tema</SheetTitle>
           <SheetDescription>
-            Adjust the appearance and layout to suit your preferences.
+            Ajuste a aparência e o layout de acordo com suas preferências.
           </SheetDescription>
         </SheetHeader>
         <div className='space-y-6 overflow-y-auto px-4'>
@@ -69,9 +69,9 @@ export function ConfigDrawer() {
           <Button
             variant='destructive'
             onClick={handleReset}
-            aria-label='Reset all settings to default values'
+            aria-label='Restaurar todas as configurações para os valores padrão'
           >
-            Reset
+            Restaurar
           </Button>
         </SheetFooter>
       </SheetContent>
@@ -132,7 +132,7 @@ function RadioGroupItem({
     <Item
       value={item.value}
       className={cn('group outline-none', 'transition duration-200 ease-in')}
-      aria-label={`Select ${item.label.toLowerCase()}`}
+      aria-label={`Selecionar ${item.label.toLowerCase()}`}
       aria-describedby={`${item.value}-description`}
     >
       <div
@@ -143,7 +143,7 @@ function RadioGroupItem({
         )}
         role='img'
         aria-hidden='false'
-        aria-label={`${item.label} option preview`}
+        aria-label={`${item.label} pré-visualização da opção`}
       >
         <CircleCheck
           className={cn(
@@ -177,32 +177,32 @@ function ThemeConfig() {
   return (
     <div>
       <SectionTitle
-        title='Theme'
+        title='Tema'
         showReset={theme !== defaultTheme}
         onReset={() => setTheme(defaultTheme)}
-        resetAriaLabel='Reset theme preference to default'
+        resetAriaLabel='Restaurar preferência de tema para o padrão'
       />
       <Radio
         value={theme}
         onValueChange={setTheme}
         className='grid w-full max-w-md grid-cols-3 gap-4'
-        aria-label='Select theme preference'
+        aria-label='Selecionar preferência de tema'
         aria-describedby='theme-description'
       >
         {[
           {
             value: 'system',
-            label: 'System',
+            label: 'Sistema',
             icon: IconThemeSystem,
           },
           {
             value: 'light',
-            label: 'Light',
+            label: 'Claro',
             icon: IconThemeLight,
           },
           {
             value: 'dark',
-            label: 'Dark',
+            label: 'Escuro',
             icon: IconThemeDark,
           },
         ].map((item) => (
@@ -210,7 +210,7 @@ function ThemeConfig() {
         ))}
       </Radio>
       <div id='theme-description' className='sr-only'>
-        Choose between system preference, light mode, or dark mode
+        Escolha entre preferência do sistema, modo claro ou modo escuro
       </div>
     </div>
   )
@@ -221,16 +221,16 @@ function SidebarConfig() {
   return (
     <div className='max-md:hidden'>
       <SectionTitle
-        title='Sidebar'
+        title='Barra lateral'
         showReset={defaultVariant !== variant}
         onReset={() => setVariant(defaultVariant)}
-        resetAriaLabel='Reset sidebar style to default'
+        resetAriaLabel='Restaurar estilo da barra lateral para o padrão'
       />
       <Radio
         value={variant}
         onValueChange={setVariant}
         className='grid w-full max-w-md grid-cols-3 gap-4'
-        aria-label='Select sidebar style'
+        aria-label='Selecionar estilo da barra lateral'
         aria-describedby='sidebar-description'
       >
         {[
@@ -241,12 +241,12 @@ function SidebarConfig() {
           },
           {
             value: 'floating',
-            label: 'Floating',
+            label: 'Flutuante',
             icon: IconSidebarFloating,
           },
           {
             value: 'sidebar',
-            label: 'Sidebar',
+            label: 'Lateral',
             icon: IconSidebarSidebar,
           },
         ].map((item) => (
@@ -254,7 +254,7 @@ function SidebarConfig() {
         ))}
       </Radio>
       <div id='sidebar-description' className='sr-only'>
-        Choose between inset, floating, or standard sidebar layout
+        Escolha entre layout com recuo, flutuante ou barra lateral padrão
       </div>
     </div>
   )
@@ -275,7 +275,7 @@ function LayoutConfig() {
           setOpen(true)
           setCollapsible(defaultCollapsible)
         }}
-        resetAriaLabel='Reset layout options to default'
+        resetAriaLabel='Restaurar opções de layout para o padrão'
       />
       <Radio
         value={radioState}
@@ -288,23 +288,23 @@ function LayoutConfig() {
           setCollapsible(v as Collapsible)
         }}
         className='grid w-full max-w-md grid-cols-3 gap-4'
-        aria-label='Select layout style'
+        aria-label='Selecionar estilo de layout'
         aria-describedby='layout-description'
       >
         {[
           {
             value: 'default',
-            label: 'Default',
+            label: 'Padrão',
             icon: IconLayoutDefault,
           },
           {
             value: 'icon',
-            label: 'Compact',
+            label: 'Compacto',
             icon: IconLayoutCompact,
           },
           {
             value: 'offcanvas',
-            label: 'Full layout',
+            label: 'Expandido',
             icon: IconLayoutFull,
           },
         ].map((item) => (
@@ -312,7 +312,7 @@ function LayoutConfig() {
         ))}
       </Radio>
       <div id='layout-description' className='sr-only'>
-        Choose between default expanded, compact icon-only, or full layout mode
+        Escolha entre layout padrão expandido, ícones compactos ou modo expandido
       </div>
     </div>
   )
@@ -323,29 +323,29 @@ function DirConfig() {
   return (
     <div>
       <SectionTitle
-        title='Direction'
+        title='Direção'
         showReset={defaultDir !== dir}
         onReset={() => setDir(defaultDir)}
-        resetAriaLabel='Reset text direction to default'
+        resetAriaLabel='Restaurar direção do texto para o padrão'
       />
       <Radio
         value={dir}
         onValueChange={setDir}
         className='grid w-full max-w-md grid-cols-3 gap-4'
-        aria-label='Select site direction'
+        aria-label='Selecionar direção do site'
         aria-describedby='direction-description'
       >
         {[
           {
             value: 'ltr',
-            label: 'Left to Right',
+            label: 'Esquerda para Direita',
             icon: (props: SVGProps<SVGSVGElement>) => (
               <IconDir dir='ltr' {...props} />
             ),
           },
           {
             value: 'rtl',
-            label: 'Right to Left',
+            label: 'Direita para Esquerda',
             icon: (props: SVGProps<SVGSVGElement>) => (
               <IconDir dir='rtl' {...props} />
             ),
@@ -355,7 +355,7 @@ function DirConfig() {
         ))}
       </Radio>
       <div id='direction-description' className='sr-only'>
-        Choose between left-to-right or right-to-left site direction
+        Escolha entre direção esquerda-para-direita ou direita-para-esquerda
       </div>
     </div>
   )

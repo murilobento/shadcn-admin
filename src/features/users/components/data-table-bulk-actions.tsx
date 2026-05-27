@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { type Table } from '@tanstack/react-table'
-import { Trash2, UserX, UserCheck, Mail } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { sleep } from '@/lib/utils'
+import { useQueryClient } from '@tanstack/react-query'
+import api from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import {
   Tooltip,
@@ -11,104 +12,34 @@ import {
 } from '@/components/ui/tooltip'
 import { DataTableBulkActions as BulkActionsToolbar } from '@/components/data-table'
 import { type User } from '../data/schema'
-import { UsersMultiDeleteDialog } from './users-multi-delete-dialog'
 
-type DataTableBulkActionsProps<TData> = {
-  table: Table<TData>
+type DataTableBulkActionsProps = {
+  table: Table<User>
 }
 
-export function DataTableBulkActions<TData>({
-  table,
-}: DataTableBulkActionsProps<TData>) {
+export function DataTableBulkActions({ table }: DataTableBulkActionsProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const selectedRows = table.getFilteredSelectedRowModel().rows
+  const queryClient = useQueryClient()
 
-  const handleBulkStatusChange = (status: 'active' | 'inactive') => {
-    const selectedUsers = selectedRows.map((row) => row.original as User)
-    toast.promise(sleep(2000), {
-      loading: `${status === 'active' ? 'Activating' : 'Deactivating'} users...`,
-      success: () => {
-        table.resetRowSelection()
-        return `${status === 'active' ? 'Activated' : 'Deactivated'} ${selectedUsers.length} user${selectedUsers.length > 1 ? 's' : ''}`
-      },
-      error: `Error ${status === 'active' ? 'activating' : 'deactivating'} users`,
-    })
-    table.resetRowSelection()
+  const handleBulkDelete = async () => {
+    const ids = selectedRows.map((row) => row.original.id)
+    try {
+      await Promise.all(ids.map((id) => api.delete(`/users/${id}`)))
+      toast.success(`${ids.length} usuário${ids.length > 1 ? 's' : ''} excluído${ids.length > 1 ? 's' : ''}.`)
+      table.resetRowSelection()
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+    } catch {
+      toast.error('Falha ao excluir alguns usuários.')
+    }
+    setShowDeleteConfirm(false)
   }
 
-  const handleBulkInvite = () => {
-    const selectedUsers = selectedRows.map((row) => row.original as User)
-    toast.promise(sleep(2000), {
-      loading: 'Inviting users...',
-      success: () => {
-        table.resetRowSelection()
-        return `Invited ${selectedUsers.length} user${selectedUsers.length > 1 ? 's' : ''}`
-      },
-      error: 'Error inviting users',
-    })
-    table.resetRowSelection()
-  }
+  if (selectedRows.length === 0) return null
 
   return (
     <>
-      <BulkActionsToolbar table={table} entityName='user'>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant='outline'
-              size='icon'
-              onClick={handleBulkInvite}
-              className='size-8'
-              aria-label='Invite selected users'
-              title='Invite selected users'
-            >
-              <Mail />
-              <span className='sr-only'>Invite selected users</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Invite selected users</p>
-          </TooltipContent>
-        </Tooltip>
-
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant='outline'
-              size='icon'
-              onClick={() => handleBulkStatusChange('active')}
-              className='size-8'
-              aria-label='Activate selected users'
-              title='Activate selected users'
-            >
-              <UserCheck />
-              <span className='sr-only'>Activate selected users</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Activate selected users</p>
-          </TooltipContent>
-        </Tooltip>
-
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant='outline'
-              size='icon'
-              onClick={() => handleBulkStatusChange('inactive')}
-              className='size-8'
-              aria-label='Deactivate selected users'
-              title='Deactivate selected users'
-            >
-              <UserX />
-              <span className='sr-only'>Deactivate selected users</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Deactivate selected users</p>
-          </TooltipContent>
-        </Tooltip>
-
+      <BulkActionsToolbar table={table} entityName='usuário'>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -116,24 +47,40 @@ export function DataTableBulkActions<TData>({
               size='icon'
               onClick={() => setShowDeleteConfirm(true)}
               className='size-8'
-              aria-label='Delete selected users'
-              title='Delete selected users'
+              aria-label='Excluir usuários selecionados'
+              title='Excluir usuários selecionados'
             >
               <Trash2 />
-              <span className='sr-only'>Delete selected users</span>
+              <span className='sr-only'>Excluir usuários selecionados</span>
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Delete selected users</p>
+            <p>Excluir usuários selecionados</p>
           </TooltipContent>
         </Tooltip>
       </BulkActionsToolbar>
 
-      <UsersMultiDeleteDialog
-        table={table}
-        open={showDeleteConfirm}
-        onOpenChange={setShowDeleteConfirm}
-      />
+      {showDeleteConfirm && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50'>
+          <div className='rounded-lg border bg-background p-6 shadow-lg'>
+            <h3 className='text-lg font-semibold'>Excluir {selectedRows.length} usuário{selectedRows.length > 1 ? 's' : ''}?</h3>
+            <p className='mt-2 text-sm text-muted-foreground'>
+              Esta ação não pode ser desfeita.
+            </p>
+            <div className='mt-4 flex justify-end gap-2'>
+              <Button
+                variant='outline'
+                onClick={() => setShowDeleteConfirm(false)}
+              >
+                Cancelar
+              </Button>
+              <Button variant='destructive' onClick={handleBulkDelete}>
+                Excluir
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

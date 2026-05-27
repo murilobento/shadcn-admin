@@ -1,9 +1,11 @@
-'use client'
-
+import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { showSubmittedData } from '@/lib/show-submitted-data'
+import { Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
+import { useQueryClient } from '@tanstack/react-query'
+import api from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -23,21 +25,16 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
-import { SelectDropdown } from '@/components/select-dropdown'
-import { roles } from '../data/data'
 import { type User } from '../data/schema'
 
 const formSchema = z
   .object({
-    firstName: z.string().min(1, 'First Name is required.'),
-    lastName: z.string().min(1, 'Last Name is required.'),
-    username: z.string().min(1, 'Username is required.'),
-    phoneNumber: z.string().min(1, 'Phone number is required.'),
+    firstName: z.string().min(1, 'Nome é obrigatório.'),
+    lastName: z.string().min(1, 'Sobrenome é obrigatório.'),
     email: z.email({
-      error: (iss) => (iss.input === '' ? 'Email is required.' : undefined),
+      error: (iss) => (iss.input === '' ? 'E-mail é obrigatório.' : undefined),
     }),
     password: z.string().transform((pwd) => pwd.trim()),
-    role: z.string().min(1, 'Role is required.'),
     confirmPassword: z.string().transform((pwd) => pwd.trim()),
     isEdit: z.boolean(),
   })
@@ -46,51 +43,23 @@ const formSchema = z
       if (data.isEdit && !data.password) return true
       return data.password.length > 0
     },
-    {
-      message: 'Password is required.',
-      path: ['password'],
-    }
+    { message: 'Senha é obrigatória.', path: ['password'] }
   )
   .refine(
     ({ isEdit, password }) => {
       if (isEdit && !password) return true
-      return password.length >= 8
+      return password.length >= 7
     },
-    {
-      message: 'Password must be at least 8 characters long.',
-      path: ['password'],
-    }
-  )
-  .refine(
-    ({ isEdit, password }) => {
-      if (isEdit && !password) return true
-      return /[a-z]/.test(password)
-    },
-    {
-      message: 'Password must contain at least one lowercase letter.',
-      path: ['password'],
-    }
-  )
-  .refine(
-    ({ isEdit, password }) => {
-      if (isEdit && !password) return true
-      return /\d/.test(password)
-    },
-    {
-      message: 'Password must contain at least one number.',
-      path: ['password'],
-    }
+    { message: 'A senha deve ter pelo menos 7 caracteres.', path: ['password'] }
   )
   .refine(
     ({ isEdit, password, confirmPassword }) => {
       if (isEdit && !password) return true
       return password === confirmPassword
     },
-    {
-      message: "Passwords don't match.",
-      path: ['confirmPassword'],
-    }
+    { message: "As senhas não coincidem.", path: ['confirmPassword'] }
   )
+
 type UserForm = z.infer<typeof formSchema>
 
 type UserActionDialogProps = {
@@ -105,6 +74,9 @@ export function UsersActionDialog({
   onOpenChange,
 }: UserActionDialogProps) {
   const isEdit = !!currentRow
+  const [isLoading, setIsLoading] = useState(false)
+  const queryClient = useQueryClient()
+
   const form = useForm<UserForm>({
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
@@ -117,23 +89,48 @@ export function UsersActionDialog({
       : {
           firstName: '',
           lastName: '',
-          username: '',
           email: '',
-          role: '',
-          phoneNumber: '',
           password: '',
           confirmPassword: '',
           isEdit,
         },
   })
 
-  const onSubmit = (values: UserForm) => {
-    form.reset()
-    showSubmittedData(values)
-    onOpenChange(false)
-  }
-
   const isPasswordTouched = !!form.formState.dirtyFields.password
+
+  async function onSubmit(values: UserForm) {
+    setIsLoading(true)
+    try {
+      if (isEdit) {
+        const payload: Record<string, string> = {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          email: values.email,
+        }
+        if (values.password) payload.password = values.password
+        await api.patch(`/users/${currentRow.id}`, payload)
+        toast.success('Usuário atualizado com sucesso.')
+      } else {
+        await api.post('/users', {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          email: values.email,
+          password: values.password,
+        })
+        toast.success('Usuário criado com sucesso.')
+      }
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+      form.reset()
+      onOpenChange(false)
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { error?: string } } })?.response?.data
+          ?.error || 'Algo deu errado.'
+      toast.error(message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <Dialog
@@ -145,13 +142,13 @@ export function UsersActionDialog({
     >
       <DialogContent className='sm:max-w-lg'>
         <DialogHeader className='text-start'>
-          <DialogTitle>{isEdit ? 'Edit User' : 'Add New User'}</DialogTitle>
+          <DialogTitle>{isEdit ? 'Editar Usuário' : 'Novo Usuário'}</DialogTitle>
           <DialogDescription>
-            {isEdit ? 'Update the user here. ' : 'Create new user here. '}
-            Click save when you&apos;re done.
+            {isEdit ? 'Atualize o usuário aqui. ' : 'Crie um novo usuário aqui. '}
+            Clique em salvar quando terminar.
           </DialogDescription>
         </DialogHeader>
-        <div className='h-105 w-[calc(100%+0.75rem)] overflow-y-auto py-1 pe-3'>
+        <div className='h-80 w-[calc(100%+0.75rem)] overflow-y-auto py-1 pe-3'>
           <Form {...form}>
             <form
               id='user-form'
@@ -164,7 +161,7 @@ export function UsersActionDialog({
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-end'>
-                      First Name
+                      Nome
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -184,7 +181,7 @@ export function UsersActionDialog({
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-end'>
-                      Last Name
+                      Sobrenome
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -200,29 +197,10 @@ export function UsersActionDialog({
               />
               <FormField
                 control={form.control}
-                name='username'
-                render={({ field }) => (
-                  <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
-                    <FormLabel className='col-span-2 text-end'>
-                      Username
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='john_doe'
-                        className='col-span-4'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className='col-span-4 col-start-3' />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name='email'
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
-                    <FormLabel className='col-span-2 text-end'>Email</FormLabel>
+                    <FormLabel className='col-span-2 text-end'>E-mail</FormLabel>
                     <FormControl>
                       <Input
                         placeholder='john.doe@gmail.com'
@@ -236,50 +214,11 @@ export function UsersActionDialog({
               />
               <FormField
                 control={form.control}
-                name='phoneNumber'
-                render={({ field }) => (
-                  <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
-                    <FormLabel className='col-span-2 text-end'>
-                      Phone Number
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='+123456789'
-                        className='col-span-4'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className='col-span-4 col-start-3' />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='role'
-                render={({ field }) => (
-                  <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
-                    <FormLabel className='col-span-2 text-end'>Role</FormLabel>
-                    <SelectDropdown
-                      defaultValue={field.value}
-                      onValueChange={field.onChange}
-                      placeholder='Select a role'
-                      className='col-span-4'
-                      items={roles.map(({ label, value }) => ({
-                        label,
-                        value,
-                      }))}
-                    />
-                    <FormMessage className='col-span-4 col-start-3' />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name='password'
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-end'>
-                      Password
+                      Senha
                     </FormLabel>
                     <FormControl>
                       <PasswordInput
@@ -298,7 +237,7 @@ export function UsersActionDialog({
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-end'>
-                      Confirm Password
+                      Confirmar Senha
                     </FormLabel>
                     <FormControl>
                       <PasswordInput
@@ -316,8 +255,9 @@ export function UsersActionDialog({
           </Form>
         </div>
         <DialogFooter>
-          <Button type='submit' form='user-form'>
-            Save changes
+          <Button type='submit' form='user-form' disabled={isLoading}>
+            {isLoading && <Loader2 className='animate-spin' />}
+            Salvar alterações
           </Button>
         </DialogFooter>
       </DialogContent>

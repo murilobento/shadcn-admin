@@ -1,8 +1,8 @@
-'use client'
-
 import { useState } from 'react'
 import { AlertTriangle } from 'lucide-react'
-import { showSubmittedData } from '@/lib/show-submitted-data'
+import { toast } from 'sonner'
+import { useQueryClient } from '@tanstack/react-query'
+import api from '@/lib/api'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -21,12 +21,19 @@ export function UsersDeleteDialog({
   currentRow,
 }: UserDeleteDialogProps) {
   const [value, setValue] = useState('')
+  const queryClient = useQueryClient()
 
-  const handleDelete = () => {
-    if (value.trim() !== currentRow.username) return
+  const handleDelete = async () => {
+    if (value.trim() !== currentRow.email) return
 
-    onOpenChange(false)
-    showSubmittedData(currentRow, 'The following user has been deleted:')
+    try {
+      await api.delete(`/users/${currentRow.id}`)
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+      toast.success('Usuário excluído com sucesso.')
+      onOpenChange(false)
+    } catch {
+      toast.error('Falha ao excluir usuário.')
+    }
   }
 
   return (
@@ -34,14 +41,14 @@ export function UsersDeleteDialog({
       open={open}
       onOpenChange={onOpenChange}
       form='users-delete-form'
-      disabled={value.trim() !== currentRow.username}
+      disabled={value.trim() !== currentRow.email}
       title={
         <span className='text-destructive'>
           <AlertTriangle
             className='me-1 inline-block stroke-destructive'
             size={18}
           />{' '}
-          Delete User
+          Excluir Usuário
         </span>
       }
       desc={
@@ -54,35 +61,31 @@ export function UsersDeleteDialog({
           className='space-y-4'
         >
           <p className='mb-2'>
-            Are you sure you want to delete{' '}
-            <span className='font-bold'>{currentRow.username}</span>?
+            Tem certeza que deseja excluir{' '}
+            <span className='font-bold'>{currentRow.email}</span>?
             <br />
-            This action will permanently remove the user with the role of{' '}
-            <span className='font-bold'>
-              {currentRow.role.toUpperCase()}
-            </span>{' '}
-            from the system. This cannot be undone.
+            Esta ação removerá permanentemente o usuário do sistema. Isso não pode ser desfeito.
           </p>
 
           <Label className='my-2'>
-            Username:
+            E-mail:
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder='Enter username to confirm deletion.'
+              placeholder='Digite o e-mail para confirmar a exclusão.'
               autoFocus
             />
           </Label>
 
           <Alert variant='destructive'>
-            <AlertTitle>Warning!</AlertTitle>
+            <AlertTitle>Atenção!</AlertTitle>
             <AlertDescription>
-              Please be careful, this operation can not be rolled back.
+              Tenha cuidado, esta operação não pode ser desfeita.
             </AlertDescription>
           </Alert>
         </form>
       }
-      confirmText='Delete'
+      confirmText='Excluir'
       destructive
     />
   )
