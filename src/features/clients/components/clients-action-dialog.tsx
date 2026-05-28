@@ -24,13 +24,8 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
 import { type Client } from '../data/schema'
 
 function formatPhone(value: string): string {
@@ -157,6 +152,8 @@ export function ClientsActionDialog({
     }
   }
 
+  const statusValue = form.watch('status')
+
   return (
     <Dialog
       open={open}
@@ -167,7 +164,20 @@ export function ClientsActionDialog({
     >
       <DialogContent className='sm:max-w-lg'>
         <DialogHeader className='text-start'>
-          <DialogTitle>{isEdit ? 'Editar Cliente' : 'Novo Cliente'}</DialogTitle>
+          <div className='flex items-center justify-between'>
+            <DialogTitle>{isEdit ? 'Editar Cliente' : 'Novo Cliente'}</DialogTitle>
+            <div className='flex items-center gap-2'>
+              <Switch
+                checked={statusValue === 'active'}
+                onCheckedChange={(checked) =>
+                  form.setValue('status', checked ? 'active' : 'inactive')
+                }
+              />
+              <Label className='text-sm text-muted-foreground'>
+                {statusValue === 'active' ? 'Ativo' : 'Inativo'}
+              </Label>
+            </div>
+          </div>
           <DialogDescription>
             {isEdit ? 'Atualize o cliente aqui. ' : 'Crie um novo cliente aqui. '}
             Clique em salvar quando terminar.
@@ -365,30 +375,6 @@ export function ClientsActionDialog({
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage className='col-span-4 col-start-3' />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='status'
-                render={({ field }) => (
-                  <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
-                    <FormLabel className='col-span-2 text-end'>Status</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className='col-span-4'>
-                          <SelectValue placeholder='Selecione o status' />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value='active'>Ativo</SelectItem>
-                        <SelectItem value='inactive'>Inativo</SelectItem>
-                      </SelectContent>
-                    </Select>
                     <FormMessage className='col-span-4 col-start-3' />
                   </FormItem>
                 )}

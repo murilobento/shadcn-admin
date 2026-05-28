@@ -1,5 +1,22 @@
-import { LayoutDashboard, Users, UserCheck, Command, GalleryVerticalEnd } from 'lucide-react'
+import {
+  LayoutDashboard,
+  Users,
+  UserCheck,
+  Command,
+  GalleryVerticalEnd,
+  Wallet,
+  Shield,
+  ShoppingCart,
+  Package,
+  PackagePlus,
+  Factory,
+  Warehouse,
+  BoxesIcon,
+  Truck,
+} from 'lucide-react'
 import { type SidebarData } from '../types'
+
+const dashboard = { title: 'Painel', url: '/', icon: LayoutDashboard }
 
 export const sidebarData: SidebarData = {
   user: {
@@ -11,7 +28,6 @@ export const sidebarData: SidebarData = {
     {
       name: 'Shadcn Admin',
       logo: Command,
-      plan: 'Vite + ShadcnUI',
     },
     {
       name: 'Acme Inc',
@@ -19,26 +35,43 @@ export const sidebarData: SidebarData = {
       plan: 'Enterprise',
     },
   ],
-  navGroups: [
-    {
-      title: 'Geral',
-      items: [
-        {
-          title: 'Painel',
-          url: '/',
-          icon: LayoutDashboard,
-        },
-        {
-          title: 'Usuários',
-          url: '/users',
-          icon: Users,
-        },
-        {
-          title: 'Clientes',
-          url: '/clients',
-          icon: UserCheck,
-        },
-      ],
-    },
+  modules: [
+    { name: 'Financeiro', icon: Wallet },
+    { name: 'Administrativo', icon: Shield },
+    { name: 'Comercial', icon: ShoppingCart },
+    { name: 'Estoque', icon: Package },
   ],
+  navGroupsByModule: {
+    Financeiro: [
+      {
+        title: 'Geral',
+        items: [dashboard],
+      },
+    ],
+    Administrativo: [
+      {
+        title: 'Geral',
+        items: [dashboard, { title: 'Usuários', url: '/users', icon: Users }],
+      },
+    ],
+    Comercial: [
+      {
+        title: 'Geral',
+        items: [dashboard, { title: 'Clientes', url: '/clients', icon: UserCheck }],
+      },
+    ],
+    Estoque: [
+      {
+        title: 'Geral',
+        items: [
+          dashboard,
+          { title: 'Produtos', url: '/products', icon: BoxesIcon },
+          { title: 'Insumos', url: '/supplies', icon: PackagePlus },
+          { title: 'Produções', url: '/productions', icon: Factory },
+          { title: 'Compras', url: '/purchases', icon: Truck },
+          { title: 'Estoque', url: '/stock', icon: Warehouse },
+        ],
+      },
+    ],
+  },
 }

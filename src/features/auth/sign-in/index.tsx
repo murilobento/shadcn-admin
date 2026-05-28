@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
@@ -25,25 +24,6 @@ export function SignIn() {
         <CardContent>
           <UserAuthForm redirectTo={redirect} />
         </CardContent>
-        <CardFooter>
-          <p className='px-8 text-center text-sm text-muted-foreground'>
-            Ao clicar em entrar, você concorda com nossos{' '}
-            <a
-              href='/terms'
-              className='underline underline-offset-4 hover:text-primary'
-            >
-              Termos de Serviço
-            </a>{' '}
-            e{' '}
-            <a
-              href='/privacy'
-              className='underline underline-offset-4 hover:text-primary'
-            >
-              Política de Privacidade
-            </a>
-            .
-          </p>
-        </CardFooter>
       </Card>
     </AuthLayout>
   )

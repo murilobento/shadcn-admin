@@ -38,7 +38,13 @@ type NavGroup = {
 type SidebarData = {
   user: User
   teams: Team[]
-  navGroups: NavGroup[]
+  modules: Module[]
+  navGroupsByModule: Record<string, NavGroup[]>
 }
 
-export type { SidebarData, NavGroup, NavItem, NavCollapsible, NavLink }
+type Module = {
+  name: string
+  icon: React.ElementType
+}
+
+export type { SidebarData, NavGroup, NavItem, NavCollapsible, NavLink, Module }

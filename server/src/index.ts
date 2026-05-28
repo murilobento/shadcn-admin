@@ -6,6 +6,11 @@ import { cors } from 'hono/cors'
 import { authRoutes } from './routes/auth'
 import { userRoutes } from './routes/users'
 import { clientRoutes } from './routes/clients'
+import { supplyRoutes } from './routes/supplies'
+import { productRoutes } from './routes/products'
+import { productionRoutes } from './routes/productions'
+import { stockRoutes } from './routes/stock'
+import { purchaseRoutes } from './routes/purchases'
 import prisma from './lib/prisma'
 import { hashPassword } from './lib/auth'
 
@@ -23,6 +28,11 @@ app.use(
 app.route('/api/auth', authRoutes)
 app.route('/api/users', userRoutes)
 app.route('/api/clients', clientRoutes)
+app.route('/api/supplies', supplyRoutes)
+app.route('/api/products', productRoutes)
+app.route('/api/productions', productionRoutes)
+app.route('/api/stock', stockRoutes)
+app.route('/api/purchases', purchaseRoutes)
 
 app.get('/api/health', (c) => c.json({ status: 'ok' }))
 

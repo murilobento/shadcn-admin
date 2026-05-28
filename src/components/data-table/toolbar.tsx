@@ -18,6 +18,7 @@ type DataTableToolbarProps<TData> = {
       icon?: React.ComponentType<{ className?: string }>
     }[]
   }[]
+  labels?: Record<string, string>
 }
 
 export function DataTableToolbar<TData>({
@@ -25,6 +26,7 @@ export function DataTableToolbar<TData>({
   searchPlaceholder = 'Filtrar...',
   searchKey,
   filters = [],
+  labels,
 }: DataTableToolbarProps<TData>) {
   const isFiltered =
     table.getState().columnFilters.length > 0 || table.getState().globalFilter
@@ -79,7 +81,7 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      <DataTableViewOptions table={table} />
+      <DataTableViewOptions table={table} labels={labels} />
     </div>
   )
 }

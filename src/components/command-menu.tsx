@@ -28,13 +28,15 @@ export function CommandMenu() {
     [setOpen]
   )
 
+  const allNavGroups = Object.values(sidebarData.navGroupsByModule).flat()
+
   return (
     <CommandDialog modal open={open} onOpenChange={setOpen}>
       <CommandInput placeholder='Digite um comando ou busque...' />
       <CommandList>
         <ScrollArea type='hover' className='h-72 pe-1'>
           <CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
-          {sidebarData.navGroups.map((group) => (
+          {allNavGroups.map((group) => (
             <CommandGroup key={group.title} heading={group.title}>
               {group.items.map((navItem, i) => {
                 if (navItem.url)

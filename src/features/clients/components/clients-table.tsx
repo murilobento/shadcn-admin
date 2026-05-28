@@ -35,14 +35,19 @@ export function ClientsTable({ data, search, navigate }: DataTableProps) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [sorting, setSorting] = useState<SortingState>([])
 
-  const { pagination, onPaginationChange, ensurePageInRange } =
-    useTableUrlState({
-      search,
-      navigate,
-      pagination: { defaultPage: 1, defaultPageSize: 10 },
-      globalFilter: { enabled: false },
-      columnFilters: [],
-    })
+  const {
+    pagination,
+    onPaginationChange,
+    ensurePageInRange,
+    globalFilter,
+    onGlobalFilterChange,
+  } = useTableUrlState({
+    search,
+    navigate,
+    pagination: { defaultPage: 1, defaultPageSize: 10 },
+    globalFilter: { enabled: true },
+    columnFilters: [],
+  })
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
@@ -53,12 +58,28 @@ export function ClientsTable({ data, search, navigate }: DataTableProps) {
       pagination,
       rowSelection,
       columnVisibility,
+      globalFilter,
     },
     enableRowSelection: true,
     onPaginationChange,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnVisibilityChange: setColumnVisibility,
+    onGlobalFilterChange,
+    globalFilterFn: (row, _columnId, filterValue) => {
+      const search = String(filterValue).toLowerCase()
+      const { name, phone, street, number, neighborhood, city, state } =
+        row.original
+      const address = [street, number, neighborhood, city, state]
+        .filter(Boolean)
+        .join(', ')
+        .toLowerCase()
+      return (
+        name.toLowerCase().includes(search) ||
+        phone.toLowerCase().includes(search) ||
+        address.includes(search)
+      )
+    },
     getPaginationRowModel: getPaginationRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -78,9 +99,15 @@ export function ClientsTable({ data, search, navigate }: DataTableProps) {
     >
       <DataTableToolbar
         table={table}
-        searchPlaceholder='Filtrar clientes...'
-        searchKey='name'
+        searchPlaceholder='Filtrar por nome, telefone ou endereço...'
         filters={[]}
+        labels={{
+          name: 'Nome',
+          phone: 'Telefone',
+          address: 'Endereço',
+          status: 'Status',
+          createdAt: 'Criado em',
+        }}
       />
       <div className='overflow-hidden rounded-md border'>
         <Table>
